@@ -14,13 +14,14 @@ public class ConnectRepo extends AsyncTask<Void,Void, List<Items>> {
 
 
     private AppDataBase db;
+    private ItemsCallback callback;
 
     public ConnectRepo(@NonNull AppDataBase database, ItemsCallback callback) {
         db = database;
         this.callback = callback;
     }
 
-    private ItemsCallback callback;
+
 
     public interface ItemsCallback {
         void getContactList(List<Items> contacts);
@@ -29,16 +30,11 @@ public class ConnectRepo extends AsyncTask<Void,Void, List<Items>> {
     @Override
     protected List<Items> doInBackground(Void... voids) {
 
-        List<Items> list = db.itemsDao().getItems();
-        return list;
+
+        return  db.itemsDao().getItems();
     }
 
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        Log.d("TAG", "onPreExecute ... ");
-    }
 
     @Override
     protected void onPostExecute(List<Items> items) {

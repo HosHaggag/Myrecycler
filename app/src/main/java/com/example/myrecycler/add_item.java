@@ -48,9 +48,13 @@ public class add_item extends AppCompatActivity {
 
                     Items info = createContact(name_et.getText().toString(),number_et.getText().toString());
                     if (info != null) {
+                        String mname = info.getName();
+                        String mnumber = info.getNumber();
                         Intent intent = new Intent();
                         intent.putExtra("info", info);
                         intent.putExtra("pos",getIntent().getIntExtra("pos",0));
+                        intent.putExtra("mname",mname);
+                        intent.putExtra("mnumber",mnumber);
                         setResult(Activity.RESULT_OK, intent);
                         finish();
                 }

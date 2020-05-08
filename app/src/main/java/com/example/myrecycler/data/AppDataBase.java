@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.example.myrecycler.Items;
 
-@Database(entities ={Items.class} ,version =2)
+@Database(entities ={Items.class} ,version =3)
 public abstract class AppDataBase extends RoomDatabase {
 
     private static volatile AppDataBase INSTANCE;
@@ -22,6 +22,7 @@ public abstract class AppDataBase extends RoomDatabase {
             synchronized (AppDataBase.class){
                 if (INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext() , AppDataBase.class,"ContactDatabase.db")
+                            .addMigrations()
                             .build();
                 }
             }

@@ -1,6 +1,7 @@
 package com.example.myrecycler;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myrecycler.data.AppDataBase;
 import com.example.myrecycler.repository.Add_data;
 import com.example.myrecycler.repository.ConnectRepo;
+import com.example.myrecycler.repository.Delete_data;
+import com.example.myrecycler.repository.Edit_data;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -57,9 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
             //---------------------------------
             //delete should be small case
-            db.itemsDao().Delete(items);
-            itemsList = db.itemsDao().getItems();
-            adapter.submitList(itemsList);
+            deleterepo.execute(items);
+
         }
     };
 
@@ -92,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+    Edit_data editrepo = new Edit_data(db,callback);
+    Delete_data deleterepo = new Delete_data(db,callback);
 
 
 
@@ -100,16 +103,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        ConnectRepo repo = new ConnectRepo(db, callback);
-        ConnectRepo repo = new ConnectRepo(db,callback);
-
-
-        repo.execute();
-
+        ConnectRepo repo = new ConnectRepo(db, callback);
 
         db = AppDataBase.getInstance(this);
-        itemsList = db.itemsDao().getItems();
-        adapter.submitList(itemsList);
+        repo.execute();
+
 
 
 
@@ -148,12 +146,10 @@ public class MainActivity extends AppCompatActivity {
 //            itemsList = db.itemsDao().getItems();
 //            adapter.submitList(itemsList);
             Add_data addContact = new Add_data(db, callback);
-            addContact.execute(new Items(data.getStringExtra("name"),data.getStringExtra("number")));
+            addContact.execute(new Items(data.getStringExtra("mname"),data.getStringExtra("mnumber")));
 
         } else if (requestCode == EDIT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            db.itemsDao().update((Items) data.getSerializableExtra("info"));
-            itemsList = db.itemsDao().getItems();
-            adapter.submitList(itemsList);
+            editrepo.execute(new Items(data.getStringExtra("mname"),data.getStringExtra("mnumber")));
         }
 
     }
